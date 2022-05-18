@@ -2,33 +2,37 @@ import { motion } from "framer-motion";
 import { BsFillPlayFill, BsFillPauseFill } from "react-icons/bs";
 import { useEffect, useReducer, useRef, useState } from "react";
 
+type Point = {
+    x: number;
+    y: number;
+};
+
 export const BezierCanvas = () => {
     const [t, setT] = useState<number>(0);
     const [animating, setAnimating] = useState<boolean>(false);
     let timer: any = null;
 
-    const point1ref = useRef(null);
-
-    let points: any = [];
+    let points: any[] = [];
     let pointsIn = [0, 0, 0.5, 0.8, 1, 0];
 
-    let box = { left: 0, top: 0, right: 400, bottom: 400 };
+    let box = { left: 10, top: 10, right: 390, bottom: 390 };
 
-    // read points from array.
     for (let i = 0; i < pointsIn.length; i++) {
-        let x = box.left + (box.right - box.left) * pointsIn[i];
-        let y = box.bottom + (box.top - box.bottom) * pointsIn[++i];
-        points.push({ x: x, y: y });
+        points.push({
+            x: box.left + (box.right - box.left) * pointsIn[i],
+            y: box.bottom + (box.top - box.bottom) * pointsIn[++i],
+        });
     }
 
     function setPointCoords(point: any, i: number) {
-        point.setAttribute("cx", points[i].x);
-        point.setAttribute("cy", points[i].y);
+        point.setAttribute("x", points[i].x - 20);
+        point.setAttribute("y", points[i].y - 20);
     }
 
     const movePoint = (point: any, i: number) => {
+        console.log(point);
+
         document.onmousemove = function (e) {
-            console.log(e.pageX, e.pageY, e.offsetX, e.offsetY);
             let x = e.offsetX,
                 y = e.offsetY;
 
@@ -41,12 +45,22 @@ export const BezierCanvas = () => {
             points[i].x = x;
             points[i].y = y;
             setPointCoords(point, i);
-            // drawPath();
+            drawControlPath();
         };
         document.onmouseup = function () {
             document.onmousemove = document.onmouseup = null;
         };
         return false;
+    };
+
+    const drawControlPath = () => {
+        let controlPath = document.getElementById("control-path")!;
+        let controlPathD = "M" + points[0].x + "," + points[0].y + " L";
+
+        for (let i = 1; i < points.length; i++) {
+            controlPathD += points[i].x + "," + points[i].y + " ";
+        }
+        controlPath.setAttribute("d", controlPathD);
     };
 
     useEffect(() => {
@@ -73,6 +87,7 @@ export const BezierCanvas = () => {
                 {!animating && <BsFillPlayFill />}
                 {animating && <BsFillPauseFill />}
             </motion.button>
+
             <svg
                 width="400"
                 height="400"
@@ -86,7 +101,7 @@ export const BezierCanvas = () => {
                 </defs>
                 <rect xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" fill="url(#grid)" />
 
-                <svg xmlns="http://www.w3.org/2000/svg" x={t * 300} y="169">
+                {/* <svg xmlns="http://www.w3.org/2000/svg" x={t * 300} y="169">
                     <text x="15" y="12" style={{ fill: "#fff", fontSize: "0.9rem", userSelect: "none" }}>
                         3
                     </text>
@@ -99,30 +114,44 @@ export const BezierCanvas = () => {
                         cy="20"
                         style={{ cursor: "pointer" }}
                     />
-                </svg>
+                </svg> */}
 
                 <path
                     xmlns="http://www.w3.org/2000/svg"
                     stroke="red"
                     fill="none"
                     id="bezier-path"
-                    stroke-width="1.2"
+                    strokeWidth="1.2"
                     d="M20,350 Q159,50 320,350 "
                 />
 
-                {/* <motion.svg xmlns="http://www.w3.org/2000/svg" x="-15" y="-15"> */}
-                <motion.circle
-                    r="6"
-                    fill="white"
-                    stroke="#E8C48E"
-                    strokeWidth="1"
-                    cx="20"
-                    cy="20"
-                    style={{ cursor: "pointer" }}
-                    ref={point1ref}
-                    onMouseDown={(e: any) => movePoint(e.target, 1)}
-                />
-                {/* </motion.svg> */}
+                {points.map((coords: Point, i: number) => {
+                    console.log(coords.x, coords.y);
+                    return (
+                        <motion.svg
+                            key={`point${i}`}
+                            xmlns="http://www.w3.org/2000/svg"
+                            x={coords.x - 20}
+                            y={coords.y - 20}
+                            onMouseDown={(e: any) => movePoint(e.currentTarget, i)}
+                        >
+                            <text x="15" y="12" style={{ fill: "#fff", fontSize: "0.9rem", userSelect: "none" }}>
+                                {i}
+                            </text>
+                            <circle
+                                r="6"
+                                fill="white"
+                                stroke="#00ff11"
+                                strokeWidth="1"
+                                cx={20}
+                                cy={20}
+                                style={{ cursor: "pointer" }}
+                            />
+                        </motion.svg>
+                    );
+                })}
+
+                <path xmlns="http://www.w3.org/2000/svg" fill="none" id="control-path" stroke="#36426c" />
             </svg>
         </>
     );
