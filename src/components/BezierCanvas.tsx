@@ -11,18 +11,18 @@ export const BezierCanvas = () => {
     const [t, setT] = useState<number>(0);
     const [animating, setAnimating] = useState<boolean>(false);
     let timer: any = null;
-
-    let points: any[] = [];
-    let pointsIn = [0, 0, 0.5, 0.8, 1, 0];
-
+    let pointsIn = [0, 0, 0.5, 0.9, 1, 0];
     let box = { left: 10, top: 10, right: 390, bottom: 390 };
 
+    let tempArr: any[] = [];
     for (let i = 0; i < pointsIn.length; i++) {
-        points.push({
+        tempArr.push({
             x: box.left + (box.right - box.left) * pointsIn[i],
             y: box.bottom + (box.top - box.bottom) * pointsIn[++i],
         });
     }
+
+    let [points, setPoints] = useState<Point[]>(tempArr);
 
     function setPointCoords(point: any, i: number) {
         point.setAttribute("x", points[i].x - 20);
@@ -83,15 +83,8 @@ export const BezierCanvas = () => {
         }
     };
 
-    const differenceOfPoints = (x1: number, y1: number, x2: number, y2: number) => {
-        let changeX = x2 - x1;
-        let changeY = y2 - y1;
-
-        return changeY / changeX;
-    };
-
     useEffect(() => {
-        setT(0);
+        // setT(0);
 
         timer = setInterval(() => {
             setT(t => t + 0.01);
@@ -115,22 +108,32 @@ export const BezierCanvas = () => {
     useEffect(() => {
         console.log(points);
         drawLines();
+
+        if (t >= 1) {
+            setAnimating(false);
+        }
     }, [t]);
 
     useEffect(() => {
+        console.log(points);
+
         drawLines();
         drawControlPath();
     }, []);
 
     const addPoint = () => {
-        points.push({
-            x: 50,
-            y: 50,
-        });
+        setPoints(points => [
+            ...points,
+            {
+                x: 50,
+                y: 50,
+            },
+        ]);
     };
 
     const removePoint = () => {
-        points.pop();
+        let poppedArr = points.splice(-1);
+        setPoints([...poppedArr]);
     };
 
     return (
@@ -193,8 +196,13 @@ export const BezierCanvas = () => {
                     d="M20,350 Q159,50 320,350 "
                 /> */}
 
+                    <path xmlns="http://www.w3.org/2000/svg" fill="none" id="control-path" stroke="#36426c" />
+
+                    {points.map((_, i) => {
+                        return <path xmlns="http://www.w3.org/2000/svg" fill="none" id={`path${i}`} stroke="#15a17e" />;
+                    })}
+
                     {points.map((coords: Point, i: number) => {
-                        console.log(coords.x, coords.y);
                         return (
                             <motion.svg
                                 key={`point${i}`}
@@ -217,12 +225,6 @@ export const BezierCanvas = () => {
                                 />
                             </motion.svg>
                         );
-                    })}
-
-                    <path xmlns="http://www.w3.org/2000/svg" fill="none" id="control-path" stroke="#36426c" />
-
-                    {points.map((_, i) => {
-                        return <path xmlns="http://www.w3.org/2000/svg" fill="none" id={`path${i}`} stroke="#15a17e" />;
                     })}
                 </>
             </svg>
