@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
-import { BsFillPlayFill, BsFillPauseFill, BsPlus, BsSubtract } from "react-icons/bs";
+import { BsFillPlayFill, BsFillPauseFill } from "react-icons/bs";
+import { FiPlus, FiMinus } from "react-icons/fi";
 import { useEffect, useReducer, useRef, useState } from "react";
 
 type Point = {
@@ -129,10 +130,14 @@ export const BezierCanvas = () => {
                 y: 50,
             },
         ]);
+
+        drawLines();
+        drawControlPath();
     };
 
     const removePoint = () => {
-        let poppedArr = points.splice(-1);
+        let poppedArr = [...points];
+        poppedArr.pop();
         setPoints([...poppedArr]);
     };
 
@@ -150,11 +155,11 @@ export const BezierCanvas = () => {
                 </motion.button>
 
                 <motion.button onClick={addPoint} className="bg-gray-800 p-2 rounded-md">
-                    <BsPlus />
+                    <FiPlus />
                 </motion.button>
 
                 <motion.button onClick={removePoint} className="bg-gray-800 p-2 rounded-md">
-                    <BsSubtract />
+                    <FiMinus />
                 </motion.button>
             </div>
 
