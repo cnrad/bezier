@@ -31,8 +31,6 @@ export const BezierCanvas = () => {
     }
 
     const movePoint = (point: any, i: number) => {
-        console.log(point);
-
         document.onmousemove = function (e) {
             let x = e.offsetX,
                 y = e.offsetY;
@@ -47,7 +45,7 @@ export const BezierCanvas = () => {
             points[i].y = y;
             setPointCoords(point, i);
 
-            drawLines();
+            drawLine(points);
             drawControlPath();
         };
         document.onmouseup = function () {
@@ -66,22 +64,31 @@ export const BezierCanvas = () => {
         controlPath.setAttribute("d", controlPathD);
     };
 
-    const drawLines = () => {
-        for (let i = 0; i < points.length - 2; i++) {
-            let path = document.getElementById(`path${i}`)!;
-            let curPoint = {
-                x: points[i].x + t * (points[i + 1].x - points[i].x),
-                y: points[i].y + t * (points[i + 1].y - points[i].y),
-            };
+    const drawLine = (pointArr: any) => {
+        let subPoints = [];
+        let x = points[0].x + (points[1].x - points[0].x) * t;
+        let y = points[0].y + (points[1].y - points[0].y) * t;
 
-            let nextPoint = {
-                x: points[i + 1].x + t * (points[i + 2].x - points[i + 1].x),
-                y: points[i + 1].y + t * (points[i + 2].y - points[i + 1].y),
-            };
+        let subpathLine = "M" + x + "," + y + " L";
+        subPoints.push({ x, y });
 
-            let pathD = "M" + curPoint.x + "," + curPoint.y + " L" + nextPoint.x + "," + nextPoint.y + " ";
-            path.setAttribute("d", pathD);
+        for (let i = 0; i < points.length - 1; i++) {
+            let x = points[i].x + (points[i + 1].x - points[i].x) * t;
+            let y = points[i].y + (points[i + 1].y - points[i].y) * t;
+            subPoints.push({ x: x, y: y });
+
+            subpathLine += x + "," + y + " ";
+
+            // let pathD = "M" + curPoint.x + "," + curPoint.y + " L" + nextPoint.x + "," + nextPoint.y + " ";
+            // path.setAttribute("d", pathD);
         }
+
+        let path = document.getElementById(`path${pointArr.length}`)!;
+        path.setAttribute("d", subpathLine);
+
+        // if (subPoints.length > 2) {
+        //     drawLine(subPoints);
+        // }
     };
 
     useEffect(() => {
@@ -90,7 +97,7 @@ export const BezierCanvas = () => {
         timer = setInterval(() => {
             setT(t => t + 0.01);
 
-            drawLines();
+            drawLine(points);
 
             if (t >= 1) {
                 setT(0);
@@ -107,8 +114,7 @@ export const BezierCanvas = () => {
     }, [animating]);
 
     useEffect(() => {
-        console.log(points);
-        drawLines();
+        drawLine(points);
 
         if (t >= 1) {
             setAnimating(false);
@@ -116,9 +122,7 @@ export const BezierCanvas = () => {
     }, [t]);
 
     useEffect(() => {
-        console.log(points);
-
-        drawLines();
+        drawLine(points);
         drawControlPath();
     }, []);
 
@@ -131,11 +135,13 @@ export const BezierCanvas = () => {
             },
         ]);
 
-        drawLines();
+        drawLine(points);
         drawControlPath();
     };
 
     const removePoint = () => {
+        if (points.length < 2) return;
+
         let poppedArr = [...points];
         poppedArr.pop();
         setPoints([...poppedArr]);
@@ -204,7 +210,15 @@ export const BezierCanvas = () => {
                     <path xmlns="http://www.w3.org/2000/svg" fill="none" id="control-path" stroke="#36426c" />
 
                     {points.map((_, i) => {
-                        return <path xmlns="http://www.w3.org/2000/svg" fill="none" id={`path${i}`} stroke="#15a17e" />;
+                        return (
+                            <path
+                                key={`path${points.length - i}`}
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                id={`path${points.length - i}`}
+                                stroke="#15a17e"
+                            />
+                        );
                     })}
 
                     {points.map((coords: Point, i: number) => {
