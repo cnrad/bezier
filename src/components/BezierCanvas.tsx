@@ -64,8 +64,6 @@ export const BezierCanvas = () => {
     };
 
     const drawLine = (pointArr: any) => {
-        console.log("AJJDIOIJOSAD", pointArr);
-
         let subPoints = [];
 
         let x = pointArr[0].x + (pointArr[1].x - pointArr[0].x) * t;
@@ -81,6 +79,19 @@ export const BezierCanvas = () => {
             console.log(subPoints);
 
             subpathLine += x + "," + y + " ";
+        }
+
+        if (pointArr.length <= 3) {
+            let marker = document.getElementById("marker")!;
+            let mx, my;
+            if (t == 1) {
+                (mx = -10), (my = -10);
+            } else {
+                mx = subPoints[0].x + (subPoints[1].x - subPoints[0].x) * t;
+                my = subPoints[0].y + (subPoints[1].y - subPoints[0].y) * t;
+            }
+            marker.setAttribute("cx", mx);
+            marker.setAttribute("cy", my);
         }
 
         let path = document.getElementById(`path${pointArr.length}`)!;
@@ -114,7 +125,7 @@ export const BezierCanvas = () => {
     };
 
     const removePoint = () => {
-        if (points.length < 2) return;
+        if (points.length < 2) return; // fix this lol
 
         let poppedArr = [...points];
         poppedArr.pop();
@@ -122,18 +133,20 @@ export const BezierCanvas = () => {
     };
 
     return (
-        <>
-            <p>t = {t.toFixed(2)}</p>
-            <input
-                type="range"
-                min="0"
-                max="1"
-                step="any"
-                value={t}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setT(+e.target.value)}
-            />
-
+        <div className="flex flex-col items-center justify-center">
             <div className="flex flex-row items-center justify-center gap-4 my-4">
+                <div className="flex flex-col items-center mx-12">
+                    <p className="text-xl">t = {t.toFixed(2)}</p>
+                    <input
+                        type="range"
+                        min="0"
+                        max="1"
+                        step="any"
+                        value={t}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setT(+e.target.value)}
+                    />
+                </div>
+
                 <motion.button onClick={addPoint} className="bg-gray-800 p-2 rounded-md">
                     <FiPlus />
                 </motion.button>
@@ -157,31 +170,13 @@ export const BezierCanvas = () => {
                     </defs>
                     <rect xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" fill="url(#grid)" />
 
-                    {/* <svg xmlns="http://www.w3.org/2000/svg" x={t * 300} y="169">
-                    <text x="15" y="12" style={{ fill: "#fff", fontSize: "0.9rem", userSelect: "none" }}>
-                        3
-                    </text>
-                    <motion.circle
-                        r="6"
-                        fill="white"
-                        stroke="#E8C48E"
-                        strokeWidth="1"
-                        cx="20"
-                        cy="20"
-                        style={{ cursor: "pointer" }}
+                    <path
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        id="control-path"
+                        stroke="#36426c"
+                        style={{ filter: "drop-shadow(0 0 2px #3f5abc)" }}
                     />
-                </svg> */}
-
-                    {/* <path
-                    xmlns="http://www.w3.org/2000/svg"
-                    stroke="red"
-                    fill="none"
-                    id="bezier-path"
-                    strokeWidth="1.2"
-                    d="M20,350 Q159,50 320,350 "
-                /> */}
-
-                    <path xmlns="http://www.w3.org/2000/svg" fill="none" id="control-path" stroke="#36426c" />
 
                     {points.map((_, i) => {
                         return (
@@ -190,7 +185,12 @@ export const BezierCanvas = () => {
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
                                 id={`path${points.length - i}`}
-                                stroke={["#488a6f", "#8c4b9c", "#afbe6c"][i % 3]}
+                                stroke={["#488a6f", "#8c4b9c", "#afbe6c", "#a16f4d"][i % 4]}
+                                style={{
+                                    filter: `drop-shadow(0 0 4px ${
+                                        ["#488a6f", "#8c4b9c", "#afbe6c", "#a16f4d"][i % 4]
+                                    })`,
+                                }}
                             />
                         );
                     })}
@@ -209,8 +209,8 @@ export const BezierCanvas = () => {
                                 </text>
                                 <circle
                                     r="6"
-                                    fill="white"
-                                    stroke="#00ff11"
+                                    fill="#242f3d"
+                                    stroke="#404356"
                                     strokeWidth="1"
                                     cx={20}
                                     cy={20}
@@ -219,8 +219,17 @@ export const BezierCanvas = () => {
                             </motion.svg>
                         );
                     })}
+
+                    <circle
+                        xmlns="http://www.w3.org/2000/svg"
+                        id="marker"
+                        fill="#f00"
+                        stroke="#fff"
+                        r="6"
+                        style={{ filter: "drop-shadow(0 0 7px #f00)" }}
+                    />
                 </>
             </svg>
-        </>
+        </div>
     );
 };
