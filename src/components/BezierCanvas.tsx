@@ -173,7 +173,7 @@ export const BezierCanvas = () => {
                 width="400"
                 height="400"
                 viewBox="0 0 400 400"
-                className="bg-gray-900/50 border border-gray-500/20 text-white flex items-center justify-center rounded-md"
+                className="bg-gray-900/50 border border-gray-500/20 text-white flex items-center justify-center rounded-md select-none"
             >
                 <>
                     <defs xmlns="http://www.w3.org/2000/svg">

@@ -16,15 +16,16 @@ const Index: NextPage = () => {
             <Head>
                 <title>Bezier Curves</title>
             </Head>
-            <div className="w-full h-[100vh] flex flex-row items-center justify-evenly text-white text-3xl font-semibold">
+            <div className="w-full h-[100vh] flex flex-row items-center justify-evenly text-white text-3xl font-semibold overflow-hidden">
                 <div
                     className="flex items-center justify-center p-2 bg-slate-800 text-white cursor-pointer rounded-md ml-4 hover:text-gray-400 hover:bg-slate-800/50 transition-all"
-                    onClick={() => setStep(step => step - 1)}
+                    style={{ cursor: step > 0 ? "pointer" : "not-allowed" }}
+                    onClick={() => (step > 0 ? setStep(step => step - 1) : null)}
                 >
                     <BsChevronLeft />
                 </div>
 
-                <div className="flex items-center justify-center h-96 w-64 md:w-[40rem]">
+                <div className="flex items-center justify-center h-96 w-64 md:w-[44rem]">
                     <AnimatePresence exitBeforeEnter>
                         {step === 0 && (
                             <Intro
@@ -57,8 +58,9 @@ const Index: NextPage = () => {
                 </div>
 
                 <div
-                    className="flex items-center justify-center p-2 bg-slate-800 text-white cursor-pointer rounded-md mr-4 hover:text-gray-400 hover:bg-slate-800/50 transition-all"
-                    onClick={() => setStep(step => step + 1)}
+                    className="flex items-center justify-center p-2 bg-slate-800 text-white rounded-md mr-4 hover:text-gray-400 hover:bg-slate-800/50 transition-all"
+                    style={{ cursor: step <= 10 ? "pointer" : "not-allowed" }}
+                    onClick={() => (step <= 10 ? setStep(step => step + 1) : null)}
                 >
                     <BsChevronRight />
                 </div>
