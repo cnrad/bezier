@@ -64,30 +64,31 @@ export const BezierCanvas = () => {
     };
 
     const drawLine = (pointArr: any) => {
+        console.log("AJJDIOIJOSAD", pointArr);
+
         let subPoints = [];
-        let x = points[0].x + (points[1].x - points[0].x) * t;
-        let y = points[0].y + (points[1].y - points[0].y) * t;
+
+        let x = pointArr[0].x + (pointArr[1].x - pointArr[0].x) * t;
+        let y = pointArr[0].y + (pointArr[1].y - pointArr[0].y) * t;
 
         let subpathLine = "M" + x + "," + y + " L";
         subPoints.push({ x, y });
 
-        for (let i = 0; i < points.length - 1; i++) {
-            let x = points[i].x + (points[i + 1].x - points[i].x) * t;
-            let y = points[i].y + (points[i + 1].y - points[i].y) * t;
+        for (let i = 1; i < pointArr.length - 1; i++) {
+            let x = pointArr[i].x + (pointArr[i + 1].x - pointArr[i].x) * t;
+            let y = pointArr[i].y + (pointArr[i + 1].y - pointArr[i].y) * t;
             subPoints.push({ x: x, y: y });
+            console.log(subPoints);
 
             subpathLine += x + "," + y + " ";
-
-            // let pathD = "M" + curPoint.x + "," + curPoint.y + " L" + nextPoint.x + "," + nextPoint.y + " ";
-            // path.setAttribute("d", pathD);
         }
 
         let path = document.getElementById(`path${pointArr.length}`)!;
         path.setAttribute("d", subpathLine);
 
-        // if (subPoints.length > 2) {
-        //     drawLine(subPoints);
-        // }
+        if (subPoints.length > 2) {
+            drawLine(subPoints);
+        }
     };
 
     useEffect(() => {
@@ -97,7 +98,7 @@ export const BezierCanvas = () => {
     useEffect(() => {
         drawLine(points);
         drawControlPath();
-    }, []);
+    }, [points]);
 
     const addPoint = () => {
         setPoints(points => [
@@ -128,6 +129,7 @@ export const BezierCanvas = () => {
                 min="0"
                 max="1"
                 step="any"
+                value={t}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setT(+e.target.value)}
             />
 
@@ -188,7 +190,7 @@ export const BezierCanvas = () => {
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
                                 id={`path${points.length - i}`}
-                                stroke="#15a17e"
+                                stroke={["#488a6f", "#8c4b9c", "#afbe6c"][i % 3]}
                             />
                         );
                     })}
