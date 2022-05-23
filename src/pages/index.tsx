@@ -1,15 +1,21 @@
 import { AnimatePresence } from "framer-motion";
 import type { NextPage } from "next";
 import Head from "next/head";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BsChevronRight, BsChevronLeft } from "react-icons/bs";
 
 import Demonstration from "../components/steps/Demonstration";
 import Algorithm from "../components/steps/Algorithm";
 import Intro from "../components/steps/Intro";
+import { useRouter } from "next/router";
 
-const Index: NextPage = () => {
-    const [step, setStep] = useState<number>(0);
+const Index: NextPage<any> = ({ slide }: { slide: number }) => {
+    const [step, setStep] = useState<number>(+slide ?? 0);
+    const router = useRouter();
+
+    useEffect(() => {
+        router.push(`/?s=${step}`);
+    }, [step]);
 
     return (
         <>
@@ -68,5 +74,15 @@ const Index: NextPage = () => {
         </>
     );
 };
+
+export async function getServerSideProps({ query }: { query: Record<string, any> }) {
+    console.log(query);
+
+    return {
+        props: {
+            slide: query["s"] ?? null,
+        },
+    };
+}
 
 export default Index;
