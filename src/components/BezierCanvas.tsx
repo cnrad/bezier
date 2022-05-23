@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { BsFillPlayFill, BsFillPauseFill } from "react-icons/bs";
 import { FiPlus, FiMinus } from "react-icons/fi";
-import { useEffect, useReducer, useRef, useState } from "react";
+import React, { useEffect, useReducer, useRef, useState } from "react";
 
 type Point = {
     x: number;
@@ -10,8 +10,7 @@ type Point = {
 
 export const BezierCanvas = () => {
     const [t, setT] = useState<number>(0);
-    const [animating, setAnimating] = useState<boolean>(false);
-    let timer: any = null;
+
     let pointsIn = [0, 0, 0.5, 0.9, 1, 0];
     let box = { left: 10, top: 10, right: 390, bottom: 390 };
 
@@ -92,33 +91,7 @@ export const BezierCanvas = () => {
     };
 
     useEffect(() => {
-        // setT(0);
-
-        timer = setInterval(() => {
-            setT(t => t + 0.01);
-
-            drawLine(points);
-
-            if (t >= 1) {
-                setT(0);
-                setAnimating(false);
-            }
-        }, 30);
-
-        if (!animating) {
-            clearInterval(timer);
-            timer = null;
-        }
-
-        return () => clearInterval(timer);
-    }, [animating]);
-
-    useEffect(() => {
         drawLine(points);
-
-        if (t >= 1) {
-            setAnimating(false);
-        }
     }, [t]);
 
     useEffect(() => {
@@ -150,16 +123,15 @@ export const BezierCanvas = () => {
     return (
         <>
             <p>t = {t.toFixed(2)}</p>
+            <input
+                type="range"
+                min="0"
+                max="1"
+                step="any"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setT(+e.target.value)}
+            />
 
             <div className="flex flex-row items-center justify-center gap-4 my-4">
-                <motion.button
-                    onClick={() => setAnimating(animating => !animating)}
-                    className="bg-gray-800 p-2 rounded-md"
-                >
-                    {!animating && <BsFillPlayFill />}
-                    {animating && <BsFillPauseFill />}
-                </motion.button>
-
                 <motion.button onClick={addPoint} className="bg-gray-800 p-2 rounded-md">
                     <FiPlus />
                 </motion.button>

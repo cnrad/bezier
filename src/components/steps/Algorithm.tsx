@@ -51,9 +51,10 @@ const Algorithm = (props: any) => {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: !showExplanation ? -200 : 200 }}
                         transition={{ duration: 0.35, ease: "easeInOut" }}
+                        className="max-h-[40rem] overflow-scroll border-y-zinc-700/70 border-y-2"
                     >
                         <p
-                            className="text-zinc-500 text-base font-normal underline underline-offset-[3px] mb-12 cursor-pointer hover:text-zinc-400"
+                            className="text-zinc-500 text-base font-normal underline underline-offset-[3px] mt-8 mb-12 cursor-pointer hover:text-zinc-400"
                             onClick={() => setShowExplanation(false)}
                         >
                             Care to see the original equation again? ↑
@@ -65,17 +66,17 @@ const Algorithm = (props: any) => {
                                 This part uses the summation operator. The bottom lists the initial condition of{" "}
                                 <i>i</i>, and until <i>i</i> reaches the value on the top of the symbol (which in this
                                 case, is <i>n</i>), the equation to the right will be evaluated using that value of{" "}
-                                <i>i</i>. In this equation, <i>n</i> represents the degree of the Bézier curve.
+                                <i>i</i>, and added to the total. In this equation, <i>n</i> represents the degree of
+                                the Bézier curve.
                             </p>
 
                             <Latex>{`$\{}_n C_i$`}</Latex>
                             <p className="text-base font-normal mb-6">
-                                This C is from Permutations and <b>C</b>ombinations, and it's known as a Binomial
-                                coefficient. Reading this, you'd say "<i>n</i> Choose <i>i</i>", because it's
-                                essentially saying that when given <i>n</i> items, return how many different ways you
-                                can choose <i>i</i> items out of it. For example, given the expression{" "}
-                                <Latex>{`$\{}_4 C_2$`}</Latex>, the answer would be 6, because there are 6 unique ways
-                                you can select 2 elements from a list of 4.
+                                This C is from <b>C</b>ombinations, and it's also known as a binomial coefficient.
+                                Reading this, you'd say "<i>n</i> Choose <i>i</i>", because it's essentially saying that
+                                when given <i>n</i> items, return how many different ways you can choose <i>i</i> items
+                                out of it. For example, given the expression <Latex>{`$\{}_4 C_2$`}</Latex>, the answer
+                                would be 6, because there are 6 unique ways you can select 2 elements from a list of 4.
                             </p>
 
                             <Latex>{`$(1-t)^{n-i}t^i$`}</Latex>
