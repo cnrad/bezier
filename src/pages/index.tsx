@@ -2,7 +2,7 @@ import { AnimatePresence } from "framer-motion";
 import type { NextPage } from "next";
 import Head from "next/head";
 import { useEffect, useState } from "react";
-import { BsChevronRight, BsChevronLeft } from "react-icons/bs";
+import { BsChevronRight, BsChevronLeft, BsGithub } from "react-icons/bs";
 
 import Demonstration from "../components/steps/Demonstration";
 import Algorithm from "../components/steps/Algorithm";
@@ -71,6 +71,13 @@ const Index: NextPage<any> = ({ slide }: { slide: number }) => {
                     <BsChevronRight />
                 </div>
             </div>
+
+            <a
+                href="https://github.com/cnrad/bezier"
+                className="fixed right-4 top-4 flex flex-row items-center justify-center gap-2 px-2 py-1 text-sm text-gray-600 hover:text-gray-400 transition-colors"
+            >
+                <BsGithub className="w-8 h-8" />
+            </a>
         </>
     );
 };

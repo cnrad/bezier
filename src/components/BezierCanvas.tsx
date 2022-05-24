@@ -10,6 +10,7 @@ type Point = {
 
 export const BezierCanvas = () => {
     const [t, setT] = useState<number>(0);
+    const [showCurve, setShowCurve] = useState(true);
 
     let pointsIn = [0, 0, 0.5, 0.9, 1, 0];
     let box = { left: 10, top: 10, right: 390, bottom: 390 };
@@ -45,6 +46,7 @@ export const BezierCanvas = () => {
             setPointCoords(point, i);
 
             drawLine(points);
+            drawBezierPath();
             drawControlPath();
         };
         document.onmouseup = function () {
@@ -61,6 +63,31 @@ export const BezierCanvas = () => {
             controlPathD += points[i].x + "," + points[i].y + " ";
         }
         controlPath.setAttribute("d", controlPathD);
+    };
+
+    const drawBezierPath = () => {
+        let letter;
+        switch (points.length) {
+            case 5:
+                letter = "S";
+                break;
+            case 4:
+                letter = "C";
+                break;
+            case 3:
+                letter = "Q";
+                break;
+            default:
+                letter = "L";
+        }
+        let bezierPathD = "M" + points[0].x + "," + points[0].y + " " + letter;
+
+        for (let i = 1; i < points.length; i++) {
+            bezierPathD += points[i].x + "," + points[i].y + " ";
+        }
+
+        let bezierPath = document.getElementById(`bezier-path`)!;
+        bezierPath.setAttribute("d", bezierPathD);
     };
 
     const drawLine = (pointArr: any) => {
@@ -103,11 +130,13 @@ export const BezierCanvas = () => {
     };
 
     useEffect(() => {
+        drawBezierPath();
         drawLine(points);
     }, [t]);
 
     useEffect(() => {
         drawLine(points);
+        drawBezierPath();
         drawControlPath();
     }, [points]);
 
@@ -145,6 +174,17 @@ export const BezierCanvas = () => {
                         value={t}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setT(+e.target.value)}
                     />
+                    <div className="mt-2 flex flex-row gap-2 items-center justify-center">
+                        <input
+                            type="checkbox"
+                            name="toggleCurve"
+                            checked={showCurve}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setShowCurve(e.target.checked)}
+                        />
+                        <label htmlFor="toggleCurve" className="text-sm font-medium">
+                            Show Curve
+                        </label>
+                    </div>
                 </div>
 
                 <motion.button onClick={addPoint} className="bg-gray-800 p-2 rounded-md">
@@ -169,6 +209,14 @@ export const BezierCanvas = () => {
                         </pattern>
                     </defs>
                     <rect xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" fill="url(#grid)" />
+
+                    <path
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        id="bezier-path"
+                        stroke="#ff4545"
+                        style={{ filter: "drop-shadow(0 0 2px #ff4545)", visibility: showCurve ? "visible" : "hidden" }}
+                    />
 
                     <path
                         xmlns="http://www.w3.org/2000/svg"
