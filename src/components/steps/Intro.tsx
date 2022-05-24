@@ -5,7 +5,11 @@ import Image from "next/image";
 const Intro = (props: any) => {
     return (
         <motion.div {...props}>
-            <img src={"/images/mainbanner.jpg"} alt="A bezier curve render" className="mb-16 rounded-xl h-56 mx-auto" />
+            <img
+                src={"/images/mainbanner.jpg"}
+                alt="A 2d render of a Bézier curve"
+                className="mb-16 rounded-xl h-56 mx-auto"
+            />
 
             <h1 className="mb-4 font-black">What are Bézier curves, and why should I care?</h1>
 

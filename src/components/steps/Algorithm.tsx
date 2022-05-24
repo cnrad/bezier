@@ -51,7 +51,7 @@ const Algorithm = (props: any) => {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: !showExplanation ? -200 : 200 }}
                         transition={{ duration: 0.35, ease: "easeInOut" }}
-                        className="max-h-[40rem] overflow-scroll border-y-zinc-700/70 border-y-2"
+                        className="max-h-[40rem] overflow-y-scroll overflow-x-hidden border-y-zinc-700/70 border-y-2"
                     >
                         <p
                             className="text-zinc-500 text-base font-normal underline underline-offset-[3px] mt-8 mb-12 cursor-pointer hover:text-zinc-400"
@@ -88,11 +88,12 @@ const Algorithm = (props: any) => {
 
                             <Latex>{`$P_i$`}</Latex>
                             <p className="text-base font-normal mb-6">
-                                This part is relatively simple. When defining the control points of a bezier curve, we
+                                This part is relatively simple. When defining the control points of a Bézier curve, we
                                 refer to them as <Latex>{`$P_n$`}</Latex>, with <i>n</i> being the <i>n</i>th point. In
                                 de Casteljau's algorithm, it's assumed that point P has information about both the X
                                 coordinate, and the Y coordinate of the point, so we don't need to solve for them
-                                separately. It's multiplying the result of the formula by the <i>i</i>th control point.
+                                separately. It's multiplying the result of the formula by the x and y coordinates of the{" "}
+                                <i>i</i>th control point.
                             </p>
                         </p>
                     </motion.div>

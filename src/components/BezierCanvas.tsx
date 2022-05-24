@@ -144,8 +144,8 @@ export const BezierCanvas = () => {
         setPoints(points => [
             ...points,
             {
-                x: 50,
-                y: 50,
+                x: 200,
+                y: 200,
             },
         ]);
 
@@ -163,14 +163,15 @@ export const BezierCanvas = () => {
 
     return (
         <div className="flex flex-col items-center justify-center">
-            <div className="flex flex-row items-center justify-center gap-4 my-4">
-                <div className="flex flex-col items-center mx-12">
+            <div className="flex flex-row items-center justify-between my-4 w-[400px]">
+                <div className="flex flex-col items-center">
                     <p className="text-xl">t = {t.toFixed(2)}</p>
                     <input
                         type="range"
                         min="0"
                         max="1"
                         step="any"
+                        className="w-64"
                         value={t}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setT(+e.target.value)}
                     />
@@ -187,13 +188,15 @@ export const BezierCanvas = () => {
                     </div>
                 </div>
 
-                <motion.button onClick={addPoint} className="bg-gray-800 p-2 rounded-md">
-                    <FiPlus />
-                </motion.button>
+                <div className="flex flex-row gap-3">
+                    <motion.button onClick={addPoint} className="bg-gray-800 p-2 rounded-md">
+                        <FiPlus className="w-5 h-5" />
+                    </motion.button>
 
-                <motion.button onClick={removePoint} className="bg-gray-800 p-2 rounded-md">
-                    <FiMinus />
-                </motion.button>
+                    <motion.button onClick={removePoint} className="bg-gray-800 p-2 rounded-md">
+                        <FiMinus className="w-5 h-5" />
+                    </motion.button>
+                </div>
             </div>
 
             <svg

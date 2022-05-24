@@ -31,7 +31,7 @@ const Index: NextPage<any> = ({ slide }: { slide: number }) => {
                     <BsChevronLeft />
                 </div>
 
-                <div className="flex items-center justify-center h-96 w-64 md:w-[44rem]">
+                <div className="flex items-center justify-center w-64 md:w-[45rem]">
                     <AnimatePresence exitBeforeEnter>
                         {step === 0 && (
                             <Intro
@@ -74,6 +74,8 @@ const Index: NextPage<any> = ({ slide }: { slide: number }) => {
 
             <a
                 href="https://github.com/cnrad/bezier"
+                target="_blank"
+                rel="noreferrer noopener"
                 className="fixed right-4 top-4 flex flex-row items-center justify-center gap-2 px-2 py-1 text-sm text-gray-600 hover:text-gray-400 transition-colors"
             >
                 <BsGithub className="w-8 h-8" />
