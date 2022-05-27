@@ -8,6 +8,7 @@ import Demonstration from "../components/steps/Demonstration";
 import Algorithm from "../components/steps/Algorithm";
 import Intro from "../components/steps/Intro";
 import { useRouter } from "next/router";
+import Derivative from "../components/steps/Derivative";
 
 const Index: NextPage<any> = ({ slide }: { slide: number }) => {
     const [step, setStep] = useState<number>(+slide ?? 0);
@@ -53,6 +54,15 @@ const Index: NextPage<any> = ({ slide }: { slide: number }) => {
                         )}
                         {step === 2 && (
                             <Demonstration
+                                key="Demonstration"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.25, ease: "easeInOut" }}
+                            />
+                        )}
+                        {step === 3 && (
+                            <Derivative
                                 key="Demonstration"
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}

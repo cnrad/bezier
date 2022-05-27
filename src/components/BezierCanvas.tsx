@@ -68,21 +68,22 @@ export const BezierCanvas = () => {
     const drawBezierPath = () => {
         let letter;
         switch (points.length) {
-            case 5:
-                letter = "S";
-                break;
             case 4:
                 letter = "C";
                 break;
             case 3:
                 letter = "Q";
                 break;
-            default:
+            case 2:
                 letter = "L";
+                break;
+            default:
+                letter = "C";
         }
         let bezierPathD = "M" + points[0].x + "," + points[0].y + " " + letter;
 
         for (let i = 1; i < points.length; i++) {
+            if (i > 3 && i % 4 === 0) bezierPathD += "C";
             bezierPathD += points[i].x + "," + points[i].y + " ";
         }
 
@@ -103,7 +104,6 @@ export const BezierCanvas = () => {
             let x = pointArr[i].x + (pointArr[i + 1].x - pointArr[i].x) * t;
             let y = pointArr[i].y + (pointArr[i + 1].y - pointArr[i].y) * t;
             subPoints.push({ x: x, y: y });
-            console.log(subPoints);
 
             subpathLine += x + "," + y + " ";
         }
