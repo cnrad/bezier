@@ -15,7 +15,7 @@ export const BezierCanvas = () => {
     let pointsIn = [0, 0, 0.5, 0.9, 1, 0];
     let box = { left: 10, top: 10, right: 390, bottom: 390 };
 
-    let tempArr: any[] = [];
+    let tempArr: Point[] = [];
     for (let i = 0; i < pointsIn.length; i++) {
         tempArr.push({
             x: box.left + (box.right - box.left) * pointsIn[i],
@@ -25,12 +25,12 @@ export const BezierCanvas = () => {
 
     let [points, setPoints] = useState<Point[]>(tempArr);
 
-    function setPointCoords(point: any, i: number) {
-        point.setAttribute("x", points[i].x - 20);
-        point.setAttribute("y", points[i].y - 20);
+    function setPointCoords(point: SVGElement, i: number) {
+        point.setAttribute("x", `${points[i].x - 20}`);
+        point.setAttribute("y", `${points[i].y - 20}`);
     }
 
-    const movePoint = (point: any, i: number) => {
+    const movePoint = (point: SVGElement, i: number) => {
         document.onmousemove = function (e) {
             let x = e.offsetX,
                 y = e.offsetY;
@@ -135,6 +135,8 @@ export const BezierCanvas = () => {
     }, [t]);
 
     useEffect(() => {
+        if (points.length > 4) setShowCurve(false);
+
         drawLine(points);
         drawBezierPath();
         drawControlPath();
@@ -189,11 +191,11 @@ export const BezierCanvas = () => {
                 </div>
 
                 <div className="flex flex-row gap-3">
-                    <motion.button onClick={addPoint} className="bg-gray-800 p-2 rounded-md">
+                    <motion.button onClick={addPoint} className="bg-gray-800 p-2 rounded-md hover:bg-gray-700">
                         <FiPlus className="w-5 h-5" />
                     </motion.button>
 
-                    <motion.button onClick={removePoint} className="bg-gray-800 p-2 rounded-md">
+                    <motion.button onClick={removePoint} className="bg-gray-800 p-2 rounded-md hover:bg-gray-700">
                         <FiMinus className="w-5 h-5" />
                     </motion.button>
                 </div>
@@ -253,7 +255,7 @@ export const BezierCanvas = () => {
                                 xmlns="http://www.w3.org/2000/svg"
                                 x={coords.x - 20}
                                 y={coords.y - 20}
-                                onMouseDown={(e: any) => movePoint(e.currentTarget, i)}
+                                onMouseDown={(e: React.MouseEvent<SVGElement>) => movePoint(e.currentTarget, i)}
                             >
                                 <text x="15" y="12" style={{ fill: "#fff", fontSize: "0.9rem", userSelect: "none" }}>
                                     {i}
@@ -281,6 +283,11 @@ export const BezierCanvas = () => {
                     />
                 </>
             </svg>
+            {points.length > 4 && (
+                <p className="mt-4 text-sm text-gray-500 font-medium">
+                    Curve will not be shown if the number of points is above 4.
+                </p>
+            )}
         </div>
     );
 };

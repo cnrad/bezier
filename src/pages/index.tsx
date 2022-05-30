@@ -1,14 +1,15 @@
 import { AnimatePresence } from "framer-motion";
 import type { NextPage } from "next";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { BsChevronRight, BsChevronLeft, BsGithub } from "react-icons/bs";
 
 import Demonstration from "../components/steps/Demonstration";
 import Algorithm from "../components/steps/Algorithm";
 import Intro from "../components/steps/Intro";
-import { useRouter } from "next/router";
 import Derivative from "../components/steps/Derivative";
+import Sources from "../components/steps/Sources";
 
 const Index: NextPage<any> = ({ slide }: { slide: number }) => {
     const [step, setStep] = useState<number>(+slide ?? 0);
@@ -64,6 +65,15 @@ const Index: NextPage<any> = ({ slide }: { slide: number }) => {
                         {step === 3 && (
                             <Derivative
                                 key="Demonstration"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.25, ease: "easeInOut" }}
+                            />
+                        )}
+                        {step === 4 && (
+                            <Sources
+                                key="Sources"
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
