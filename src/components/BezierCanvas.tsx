@@ -182,7 +182,9 @@ export const BezierCanvas = () => {
                             type="checkbox"
                             name="toggleCurve"
                             checked={showCurve}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setShowCurve(e.target.checked)}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                points.length < 5 ? setShowCurve(e.target.checked) : null
+                            }
                         />
                         <label htmlFor="toggleCurve" className="text-sm font-medium">
                             Show Curve
