@@ -8,7 +8,7 @@ import { BsChevronRight, BsChevronLeft, BsGithub } from "react-icons/bs";
 import Demonstration from "../components/steps/Demonstration";
 import Algorithm from "../components/steps/Algorithm";
 import Intro from "../components/steps/Intro";
-import Derivative from "../components/steps/Derivative";
+import RealLife from "../components/steps/RealLife";
 import Sources from "../components/steps/Sources";
 
 const Index: NextPage<any> = ({ slide }: { slide: number }) => {
@@ -63,8 +63,8 @@ const Index: NextPage<any> = ({ slide }: { slide: number }) => {
                             />
                         )}
                         {step === 3 && (
-                            <Derivative
-                                key="Demonstration"
+                            <RealLife
+                                key="RealLife"
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
@@ -85,8 +85,8 @@ const Index: NextPage<any> = ({ slide }: { slide: number }) => {
 
                 <div
                     className="flex items-center justify-center p-2 bg-slate-800 text-white rounded-md mr-4 hover:text-gray-400 hover:bg-slate-800/50 transition-all"
-                    style={{ cursor: step <= 10 ? "pointer" : "not-allowed" }}
-                    onClick={() => (step <= 10 ? setStep(step => step + 1) : null)}
+                    style={{ cursor: step < 4 ? "pointer" : "not-allowed" }}
+                    onClick={() => (step < 4 ? setStep(step => step + 1) : null)}
                 >
                     <BsChevronRight />
                 </div>
@@ -105,8 +105,6 @@ const Index: NextPage<any> = ({ slide }: { slide: number }) => {
 };
 
 export async function getServerSideProps({ query }: { query: Record<string, any> }) {
-    console.log(query);
-
     return {
         props: {
             slide: query["s"] ?? null,

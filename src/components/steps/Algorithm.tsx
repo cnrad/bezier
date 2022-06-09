@@ -51,7 +51,7 @@ const Algorithm = (props: any) => {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: !showExplanation ? -200 : 200 }}
                         transition={{ duration: 0.35, ease: "easeInOut" }}
-                        className="max-h-[40rem] overflow-y-scroll overflow-x-hidden border-y-zinc-700/70 border-y-2"
+                        className="max-h-[80vh] overflow-y-scroll overflow-x-hidden border-y-zinc-700/70 border-y-2"
                     >
                         <p
                             className="text-zinc-500 text-base font-normal underline underline-offset-[3px] mt-8 mb-12 cursor-pointer hover:text-zinc-400"
