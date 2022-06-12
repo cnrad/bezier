@@ -156,11 +156,11 @@ export const BezierCanvas = () => {
     };
 
     const removePoint = () => {
-        if (points.length < 2) return; // fix this lol
-
-        let poppedArr = [...points];
-        poppedArr.pop();
-        setPoints([...poppedArr]);
+        if (points.length > 3) {
+            let poppedArr = [...points];
+            poppedArr.pop();
+            setPoints([...poppedArr]);
+        }
     };
 
     return (
